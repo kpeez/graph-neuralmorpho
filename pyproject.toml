@@ -70,7 +70,7 @@ exclude = [
 
 [tool.ruff]
 line-length = 100
-target-version = ['py310']
+target-version = "py310"
 fix = true
 select = [
     # pycodestyle
@@ -95,7 +95,7 @@ select = [
 
 ignore = [
     # ignore ' : ' (used by black)
-    "E203",
+    # "E203", # not implemented yet
     # DoNotAssignLambda
     "E731",
 ]
