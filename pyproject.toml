@@ -1,0 +1,103 @@
+[tool.poetry]
+name = "graph_neuralmorpho"
+version = "0.0.1"
+description = "Graph-based methods for morphological analysis of neurons."
+authors = ["Kyle Puhger <fkrpuhger@gmail.com>"]
+repository = "https://github.com/kpeez/graph-neuralmorpho"
+documentation = "https://kpeez.github.io/graph-neuralmorpho/"
+readme = "README.md"
+packages = [
+  {include = "graph_neuralmorpho"}
+]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.12"
+pandas = "^1.5"
+numpy = "^1.24"
+matplotlib = "^3.6"
+seaborn = "^0.12"
+scikit-learn = "^1.2"
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.19.2"
+black = "^22.10.0"
+ruff = "^0.0.241"
+mypy = "^0.991"
+pre-commit = "^2.20.0"
+pandas-stubs = "^1.5.2.221124"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.2.0"
+[tool.poetry.group.docs.dependencies]
+mkdocs = "^1.4.2"
+mkdocs-material = "^8.5.10"
+mkdocstrings = {extras = ["python"], version = "^0.19.0"}
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+include = '\.pyi?$'
+target-version = ['py310']
+fast = true
+exclude = '''
+(
+  /(                        # exclude a few common directories in the
+    \.git                   # root of the project
+    | \.pytest_cache
+    | python-venv
+    | \.venv
+    | build
+    | dist
+    | \.tox
+  ))
+'''
+
+[tool.mypy]
+files = ["graph_neuralmorpho"]
+disallow_untyped_defs = "True"
+ignore_missing_imports = "True"
+no_implicit_optional = "True"
+check_untyped_defs = "True"
+warn_return_any = "True"
+warn_unused_ignores = "True"
+show_error_codes = "True"
+exclude = [
+    '\.venv',
+    'tests'
+]
+
+[tool.ruff]
+line-length = 100
+target-version = ['py310']
+fix = true
+select = [
+    # pycodestyle
+    "E", "W",
+    # pyflakes
+    "F",
+    # pylint
+    "PL",
+    # isort
+    "I",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # flake8-comprehensions
+    "C4",
+    # ruff
+    "RUF",
+]
+
+ignore = [
+    # ignore ' : ' (used by black)
+    "E203",
+    # DoNotAssignLambda
+    "E731",
+]
+
+
