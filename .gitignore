@@ -15,6 +15,7 @@ data
 dist
 build
 notebooks
+*.lock
 *.whl
 *.pytest_cache
 __pycache__
