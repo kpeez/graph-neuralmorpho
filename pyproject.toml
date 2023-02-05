@@ -91,6 +91,8 @@ select = [
     "SIM",
     # flake8-comprehensions
     "C4",
+    # flake8-docstrings
+    "D",
     # ruff
     "RUF",
 ]
