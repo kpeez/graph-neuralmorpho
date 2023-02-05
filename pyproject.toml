@@ -17,6 +17,7 @@ numpy = "^1.24"
 matplotlib = "^3.6"
 seaborn = "^0.12"
 scikit-learn = "^1.2"
+torch = "^1.13.1"
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = "^6.19.2"
@@ -57,20 +58,6 @@ exclude = '''
   ))
 '''
 
-[tool.mypy]
-files = ["graph_neuralmorpho"]
-disallow_untyped_defs = "True"
-ignore_missing_imports = "True"
-no_implicit_optional = "True"
-check_untyped_defs = "True"
-warn_return_any = "True"
-warn_unused_ignores = "True"
-show_error_codes = "True"
-exclude = [
-    '\.venv',
-    'tests'
-]
-
 [tool.ruff]
 line-length = 100
 target-version = "py310"
@@ -110,3 +97,17 @@ ignore = [
 
 [tool.ruff.pydocstyle]
 convention = "google"
+
+[tool.mypy]
+files = ["graph_neuralmorpho"]
+disallow_untyped_defs = "True"
+ignore_missing_imports = "True"
+no_implicit_optional = "True"
+check_untyped_defs = "True"
+warn_return_any = "True"
+warn_unused_ignores = "True"
+show_error_codes = "True"
+exclude = [
+    '\.venv',
+    'tests'
+]
