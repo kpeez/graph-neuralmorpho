@@ -21,12 +21,12 @@ torch = "^1.13.1"
 morphopy = "^0.7.2"
 
 [tool.poetry.group.dev.dependencies]
-ipykernel = "^6.19.2"
-black = "^22.10.0"
-ruff = "^0.0.241"
-mypy = "^0.991"
-pre-commit = "^2.20.0"
-pandas-stubs = "^1.5.2.221124"
+ipykernel = "^6.21.1"
+black = "^23"
+ruff = "^0.0.244"
+mypy = "^1.0.0"
+pre-commit = "^2.21.0"
+pandas-stubs = "^1.5.2.221213"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.2.0"
