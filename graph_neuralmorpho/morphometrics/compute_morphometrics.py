@@ -1,5 +1,7 @@
 """Computing traditional morphology features."""
+import argparse
 import warnings
+from argparse import RawTextHelpFormatter
 from pathlib import Path
 
 import pandas as pd
@@ -48,7 +50,7 @@ def batch_process_morphopy_features(swc_dict: dict) -> pd.DataFrame:
     return pd.concat(morpho_data_list, axis=0)
 
 
-def export_features_from_pkl(pkl_path: Path | str, export_file: str) -> None:
+def export_features_from_pkl(pkl_path: Path | str, export_file: str | None) -> None:
     """Export morphometric features from pkl file to csv in the same directory.
 
     Args:
@@ -56,10 +58,33 @@ def export_features_from_pkl(pkl_path: Path | str, export_file: str) -> None:
         export_file (str): name of exported file.
     """
     pkl_path = Path(pkl_path)
-    print(f"Starting features extraction from {Path(pkl_path.name)}...")
+    print(f"Starting features extraction from {pkl_path.name}...")
     swc_dict = pd.read_pickle(pkl_path)
     morpho_features = batch_process_morphopy_features(swc_dict)
     morpho_features["filename"] = pkl_path.name
-    export_file = export_file if Path(export_file).suffix == ".csv" else f"{export_file}.csv"
+    if export_file is None:
+        export_file = f"{pkl_path.stem}_morphopy_features.csv"
+    else:
+        export_file = export_file if Path(export_file).suffix == ".csv" else f"{export_file}.csv"
     morpho_features.to_csv(f"{pkl_path.parent}/{export_file}", index=False)
-    print(f"Finished! Exported features to {pkl_path.parent}/{export_file}.")
+    print(f"Finished! Exported features data to {pkl_path.parent}/{export_file}.")
+
+
+def configure_args() -> argparse.Namespace:
+    """Configure args for CLI."""
+    parser = argparse.ArgumentParser(
+        description="""
+        Extract morphology features from a dict of swc data.""",
+        formatter_class=RawTextHelpFormatter,
+    )
+    parser.add_argument("input_file", help="Path to file containing swc data.")
+    parser.add_argument(
+        "-f", "--feature_filename", help="Name of morphology features file.", default=None
+    )
+
+    return parser.parse_args()
+
+
+if __name__ == "__main__":
+    args = configure_args()
+    export_features_from_pkl(args.input_file, args.feature_filename)
