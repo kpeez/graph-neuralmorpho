@@ -14,7 +14,7 @@ data
 .venv
 dist
 build
-notebooks
+nb-dev
 *.lock
 *.whl
 *.pytest_cache
