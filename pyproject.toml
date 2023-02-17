@@ -22,6 +22,7 @@ morphopy = "^0.7.2"
 notebook = "^6.5.2"
 umap-learn = "^0.5.3"
 xgboost = "^1.7.3"
+hdbscan = "^0.8.29"
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = "^6.21.1"
