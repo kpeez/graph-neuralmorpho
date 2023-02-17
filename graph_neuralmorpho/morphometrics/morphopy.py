@@ -89,7 +89,9 @@ def load_morphopy_features(features_dir: Path | str) -> tuple[pd.DataFrame, dict
         df_list.append(df)
         label_dict[cls] = file.stem.split("_morphopy")[0]
 
-    return pd.concat(df_list).drop(columns=["filename"]), label_dict
+    morphopy_features = pd.concat(df_list).drop(columns=["filename"]).reset_index(drop=True)
+
+    return morphopy_features, label_dict
 
 
 @dataclass(frozen=True)
