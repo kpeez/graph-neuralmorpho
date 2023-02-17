@@ -2,6 +2,7 @@
 import argparse
 import warnings
 from argparse import RawTextHelpFormatter
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import pandas as pd
@@ -70,8 +71,59 @@ def export_features_from_pkl(pkl_path: Path | str, export_file: str | None) -> N
     print(f"Finished! Exported features data to {pkl_path.parent}/{export_file}.")
 
 
-def configure_args() -> argparse.Namespace:
-    """Configure args for CLI."""
+def load_morphopy_features(features_dir: Path | str) -> tuple[pd.DataFrame, dict[int, str]]:
+    """Load morphometric features from a directory.
+
+    Args:
+        features_dir (Path): path to directory containing csv files of morphology features.
+
+    Returns:
+        tuple[pd.DataFrame, dict[int, str]]: tuple of morphology features and label dictionary.
+    """
+    df_list = []
+    label_dict = {}
+
+    for cls, file in enumerate(Path(features_dir).glob("*morphopy_features.csv")):
+        df = pd.read_csv(file)
+        df["target"] = cls
+        df_list.append(df)
+        label_dict[cls] = file.stem.split("_morphopy")[0]
+
+    return pd.concat(df_list).drop(columns=["filename"]), label_dict
+
+
+@dataclass(frozen=True)
+class MorphopyFeatures:
+    """Features data from MorphoPy.
+
+    Attributes:
+        features_dir (Path): path to directory containing csv files of morphology features.
+        neurons (pd.Series): series of neuron names.
+        data (pd.DataFrame): DataFrame of morphology features.
+        cls_labels (dict[int, str]): dictionary of class labels.
+
+    """
+
+    features_dir: Path | str
+    data: pd.DataFrame = field(default_factory=pd.DataFrame)
+    target: pd.Series = field(default=pd.Series(dtype=int))
+    neurons: pd.Series = field(default=pd.Series(dtype=str))
+    label_dict: dict[int, str] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        """Set up data from features directory."""
+        data, label_dict = load_morphopy_features(self.features_dir)
+        target = data.pop("target")
+        neurons = data.pop("neuron_name")
+        object.__setattr__(self, "data", data)
+        object.__setattr__(self, "neurons", neurons)
+        object.__setattr__(self, "target", target)
+        object.__setattr__(self, "label_dict", label_dict)
+
+
+###############################################################################
+
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="""
         Extract morphology features from a dict of swc data.""",
@@ -82,9 +134,5 @@ def configure_args() -> argparse.Namespace:
         "-f", "--feature_filename", help="Name of morphology features file.", default=None
     )
 
-    return parser.parse_args()
-
-
-if __name__ == "__main__":
-    args = configure_args()
+    args = parser.parse_args()
     export_features_from_pkl(args.input_file, args.feature_filename)
